@@ -6,11 +6,15 @@ export const fetchWikipediaSummary = async (title) => {
 
   const cacheKey = `wiki_${title}`;
   const cached = getCachedData(cacheKey);
-  if (cached) return cached;
+  if (cached !== null && cached !== undefined) return cached;
 
   try {
     const url = `${APP_CONFIG.apiEndpoints.wikipediaSummary}${encodeURIComponent(title)}`;
     const res = await fetch(url);
+    if (res.status === 404) {
+      setCachedData(cacheKey, null, 24 * 60 * 60 * 1000); // Cache negative hit for 24h
+      return null;
+    }
     if (!res.ok) throw new Error(`Wikipedia response ${res.status}`);
 
     const data = await res.json();
@@ -24,7 +28,6 @@ export const fetchWikipediaSummary = async (title) => {
     setCachedData(cacheKey, result, 7 * 24 * 60 * 60 * 1000); // Cache 7 days
     return result;
   } catch (err) {
-    console.warn(`Wikipedia summary failed for ${title}:`, err);
     return null;
   }
 };

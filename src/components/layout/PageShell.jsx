@@ -52,7 +52,7 @@ export const PageShell = ({ children, noFooter = false, title }) => {
   }, [location.pathname, title]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-dark-bg text-slate-100 relative">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 relative">
       <Navbar />
       <motion.main
         initial={{ opacity: 0, y: 8 }}

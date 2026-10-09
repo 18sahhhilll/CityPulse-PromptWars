@@ -5,9 +5,10 @@ import { usePlaces } from '../hooks/usePlaces';
 import { useFavoriteStore } from '../store/useFavoriteStore';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Star, MapPin, Heart, Clock, ShieldCheck, Sparkles, Navigation, ArrowLeft } from 'lucide-react';
+import { Star, MapPin, Heart, Clock, ShieldCheck, Sparkles, Navigation, ArrowLeft, Tag } from 'lucide-react';
 import { MapView } from '../components/map/MapView';
 import { MarkerLayer } from '../components/map/MarkerLayer';
+import { formatApproxPrice } from '../utils/format';
 
 export const PlaceDetail = () => {
   const { id } = useParams();
@@ -46,8 +47,9 @@ export const PlaceDetail = () => {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Badge variant="violet">{place.category.toUpperCase()}</Badge>
-                <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-950/80 text-emerald-400 border border-slate-800">
-                  {place.priceLevel}
+                <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-950/80 text-emerald-400 border border-slate-800 flex items-center gap-1">
+                  <span>{place.priceLevel}</span>
+                  <span className="text-[11px] font-semibold">{formatApproxPrice(place)}</span>
                 </span>
                 {place.isBudget && <Badge variant="verified">Budget Spot</Badge>}
               </div>
@@ -105,6 +107,10 @@ export const PlaceDetail = () => {
               <div className="flex items-center gap-2 text-slate-300">
                 <Clock className="w-4 h-4 text-cyan-400" />
                 <span>Opening Hours: <strong>{place.openHours}</strong></span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <Tag className="w-4 h-4 text-emerald-400" />
+                <span>Approx Cost Range: <strong className="text-emerald-400">{formatApproxPrice(place)}</strong></span>
               </div>
             </div>
 

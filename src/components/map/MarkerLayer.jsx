@@ -5,6 +5,7 @@ import { PLACE_CATEGORIES } from '../../config/categories';
 import { Star, MapPin, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useMapStore } from '../../store/useMapStore';
+import { formatApproxPrice } from '../../utils/format';
 
 const createCategoryIcon = (category, isSelected = false) => {
   const catConfig = PLACE_CATEGORIES.find((c) => c.id === category) || PLACE_CATEGORIES[0];
@@ -73,18 +74,21 @@ export const MarkerLayer = ({ places = [], selectedPlaceId, onSelectPlace }) => 
                   />
                 )}
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <h4 className="font-bold text-sm text-slate-100 line-clamp-1">{place.name}</h4>
-                  <span className="text-xs font-semibold text-amber-400 flex items-center gap-0.5 shrink-0">
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100 line-clamp-1">{place.name}</h4>
+                  <span className="text-xs font-semibold text-amber-500 dark:text-amber-400 flex items-center gap-0.5 shrink-0">
                     <Star className="w-3 h-3 fill-amber-400" />
                     {place.rating}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 mb-2 line-clamp-2">{place.address || place.description}</p>
-                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-800">
-                  <span className="font-semibold text-emerald-400">{place.priceLevel}</span>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 mb-2 line-clamp-2">{place.address || place.description}</p>
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200 dark:border-slate-800">
+                  <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <span>{place.priceLevel}</span>
+                    <span className="text-[10px] font-normal opacity-90">{formatApproxPrice(place)}</span>
+                  </span>
                   <Link
                     to={`/explore/${place.id}`}
-                    className="inline-flex items-center gap-1 text-cyan-400 font-semibold hover:underline"
+                    className="inline-flex items-center gap-1 text-indigo-600 dark:text-cyan-400 font-semibold hover:underline"
                   >
                     Details <ExternalLink className="w-3 h-3" />
                   </Link>

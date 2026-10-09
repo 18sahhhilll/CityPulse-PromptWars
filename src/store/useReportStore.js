@@ -37,6 +37,17 @@ export const useReportStore = create((set, get) => ({
     }
   },
 
+  removeReport: (reportId) => {
+    const updated = get().reports.filter((r) => r.id !== reportId);
+    set({ reports: updated });
+    try {
+      const userAddedOnly = updated.filter(r => r.id.startsWith('user-'));
+      localStorage.setItem(LOCAL_STORAGE_REPORTS_KEY, JSON.stringify(userAddedOnly));
+    } catch (err) {
+      console.error('Failed to update local storage after report removal:', err);
+    }
+  },
+
   upvoteReport: (reportId) => {
     const updated = get().reports.map((r) => {
       if (r.id === reportId) {

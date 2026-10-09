@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, ShieldAlert, History, BarChart3, Radio, MapPin, Search, ArrowRight, ExternalLink, Plus } from 'lucide-react';
+import { Compass, ShieldAlert, History, BarChart3, Radio, MapPin, ArrowRight, ExternalLink, Plus } from 'lucide-react';
 import { PageShell } from '../components/layout/PageShell';
 import { WeatherCard } from '../components/cards/WeatherCard';
 import { ScoreCard } from '../components/cards/ScoreCard';
@@ -21,11 +21,11 @@ export const Home = () => {
   const trafficInfo = getTrafficMood(reports);
 
   const quickTiles = [
-    { title: 'Explore City', desc: 'Attractions, Food & Stays', icon: Compass, path: '/explore', color: 'from-violet-600 to-indigo-600' },
-    { title: 'Safety Heatmap', desc: 'Safer routes & accident zones', icon: ShieldAlert, path: '/safety', color: 'from-rose-600 to-pink-600' },
-    { title: 'History & Culture', desc: 'Landmarks & Heritage Trails', icon: History, path: '/history', color: 'from-amber-600 to-orange-600' },
-    { title: 'Compare Spots', desc: 'Radar score comparisons', icon: BarChart3, path: '/compare', color: 'from-cyan-600 to-blue-600' },
-    { title: 'Smart Insights', desc: 'Live citizen pulse & charts', icon: Radio, path: '/insights', color: 'from-emerald-600 to-teal-600' },
+    { title: 'Explore City', desc: 'Attractions, Food & Stays', icon: Compass, path: '/explore', color: 'from-indigo-500 to-violet-500' },
+    { title: 'Safety Heatmap', desc: 'Safer routes & accident zones', icon: ShieldAlert, path: '/safety', color: 'from-red-500 to-orange-400' },
+    { title: 'History & Culture', desc: 'Landmarks & Heritage Trails', icon: History, path: '/history', color: 'from-amber-400 to-orange-500' },
+    { title: 'Compare Spots', desc: 'Radar score comparisons', icon: BarChart3, path: '/compare', color: 'from-blue-500 to-cyan-400' },
+    { title: 'Smart Insights', desc: 'Live citizen pulse & charts', icon: Radio, path: '/insights', color: 'from-emerald-500 to-teal-400' },
   ];
 
   return (
@@ -33,47 +33,47 @@ export const Home = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         
         {/* Hero Banner Header with Interactive Mini Map */}
-        <div className="relative rounded-3xl p-6 sm:p-8 glass-panel border border-slate-800 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <div className="absolute inset-0 bg-gradient-to-r from-violet-950/60 via-slate-950/80 to-slate-950/90 -z-10" />
+        <div className="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-indigo-600 via-violet-600 to-pink-500 text-white shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-black/10 pointer-events-none" />
           
-          <div className="lg:col-span-7 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-xs font-semibold">
-              <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="lg:col-span-7 space-y-4 relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold tracking-wider uppercase shadow-sm">
+              <MapPin className="w-3.5 h-3.5 text-white" />
               <span>EXPLORING {currentCity.name.toUpperCase()}</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
-              The Real-Time Pulse of <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">{currentCity.name}</span>
+            <h1 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-white drop-shadow-sm">
+              The Real-Time Pulse of <span className="underline decoration-pink-300 decoration-wavy decoration-2">{currentCity.name}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-sm text-white/90 leading-relaxed max-w-xl">
               Discover top hospitality spots, explore heritage walking trails, navigate safety heatmaps, and access verified citizen insights.
             </p>
-            <div className="pt-1 flex items-center gap-3">
+            <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 to="/report"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-violet-600/30 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-700 hover:bg-slate-50 text-xs font-bold shadow-lg transition-all hover:scale-[1.02]"
               >
-                <Plus className="w-4 h-4 text-cyan-300" />
+                <Plus className="w-4 h-4 text-pink-500" />
                 <span>Submit Citizen Report</span>
               </Link>
               <Link
                 to="/safety"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold transition-all"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs font-semibold backdrop-blur-sm transition-all"
               >
-                <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
+                <ShieldAlert className="w-3.5 h-3.5 text-white" />
                 <span>View Heatmap</span>
               </Link>
             </div>
           </div>
 
           {/* Hero Right: Compact Interactive Mini Map */}
-          <div className="lg:col-span-5 h-56 rounded-2xl overflow-hidden border border-slate-700/60 shadow-xl relative group">
+          <div className="lg:col-span-5 h-56 rounded-2xl overflow-hidden border border-white/30 shadow-2xl relative group bg-white">
             <MapView center={currentCity} zoom={13} className="h-full w-full">
               <MarkerLayer places={places.slice(0, 5)} />
             </MapView>
             <div className="absolute bottom-3 right-3 z-[400]">
               <Link
                 to="/explore"
-                className="px-3 py-1.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-slate-700 text-xs font-semibold text-cyan-300 flex items-center gap-1.5 shadow-lg backdrop-blur-md transition-all"
+                className="px-3 py-1.5 rounded-xl bg-white/90 hover:bg-white border border-slate-200 text-xs font-bold text-indigo-600 flex items-center gap-1.5 shadow-md backdrop-blur-md transition-all"
               >
                 <span>Open full map</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -88,9 +88,9 @@ export const Home = () => {
           <ScoreCard cityName={currentCity.name} trafficLevel={trafficInfo.level} />
 
           {/* Traffic Mood Card */}
-          <div className="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col justify-between">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-md flex flex-col justify-between">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Traffic Mood</span>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Traffic Mood</span>
               <div className="flex items-center gap-1.5">
                 <Badge variant="estimated">Estimated</Badge>
                 <span className={`px-2 py-0.5 rounded-lg text-xs font-bold border ${trafficInfo.bg}`}>
@@ -99,12 +99,12 @@ export const Home = () => {
               </div>
             </div>
             <div className="my-3">
-              <div className="text-xl font-bold text-slate-100">{trafficInfo.mood}</div>
-              <p className="text-xs text-slate-400 mt-1">{trafficInfo.description}</p>
+              <div className="text-xl font-bold text-slate-900 dark:text-slate-100">{trafficInfo.mood}</div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{trafficInfo.description}</p>
             </div>
-            <div className="pt-3 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
               <span>Time-of-day heuristic</span>
-              <Link to="/safety" className="text-cyan-400 font-semibold hover:underline">Check Safer Routes →</Link>
+              <Link to="/safety" className="text-indigo-600 dark:text-cyan-400 font-semibold hover:underline">Check Safer Routes →</Link>
             </div>
           </div>
         </div>
@@ -119,7 +119,10 @@ export const Home = () => {
 
         {/* Quick Action Tiles */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold font-display text-slate-100">Explore CityPulse Modules</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold font-display text-slate-900 dark:text-slate-100">Explore CityPulse Modules</h2>
+            <div className="h-0.5 w-10 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" />
+          </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {quickTiles.map((tile, idx) => {
               const Icon = tile.icon;
@@ -127,17 +130,17 @@ export const Home = () => {
                 <Link
                   key={idx}
                   to={tile.path}
-                  className="glass-panel glass-panel-hover rounded-2xl p-4 border border-slate-800 flex flex-col justify-between h-36 group"
+                  className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all flex flex-col justify-between h-36 group"
                 >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${tile.color} p-2 text-white shadow-lg`}>
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${tile.color} p-2 text-white shadow-md`}>
                     <Icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-slate-100 group-hover:text-cyan-400 transition-colors flex items-center justify-between">
+                    <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-cyan-400 transition-colors flex items-center justify-between">
                       {tile.title}
-                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-indigo-600" />
                     </h3>
-                    <p className="text-[11px] text-slate-400 line-clamp-1">{tile.desc}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">{tile.desc}</p>
                   </div>
                 </Link>
               );
@@ -149,8 +152,8 @@ export const Home = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold font-display text-slate-100">Top Local Highlights</h2>
-              <Link to="/explore" className="text-xs font-semibold text-cyan-400 hover:underline">
+              <h2 className="text-xl font-bold font-display text-slate-900 dark:text-slate-100">Top Local Highlights</h2>
+              <Link to="/explore" className="text-xs font-semibold text-indigo-600 dark:text-cyan-400 hover:underline">
                 View All Spots ({places.length}) →
               </Link>
             </div>
@@ -163,8 +166,8 @@ export const Home = () => {
 
           {/* Quick City Map */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold font-display text-slate-100">City Overview Map</h2>
-            <div className="h-[460px] rounded-2xl overflow-hidden border border-slate-800 shadow-xl">
+            <h2 className="text-xl font-bold font-display text-slate-900 dark:text-slate-100">City Overview Map</h2>
+            <div className="h-[460px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-white">
               <MapView center={currentCity} zoom={12}>
                 <MarkerLayer places={places} />
               </MapView>

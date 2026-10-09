@@ -67,15 +67,15 @@ export const MapView = ({
   const isOsmDarkFallback = priorityLevel === 3 && theme === 'dark';
 
   return (
-    <div className={`relative rounded-2xl overflow-hidden border border-slate-800 shadow-xl ${className} ${isOsmDarkFallback ? 'dark-map-filter' : ''}`}>
+    <div className={`relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl ${className} ${isOsmDarkFallback ? 'dark-map-filter' : ''}`}>
       {showResetButton && (
         <button
           onClick={() => resetMapCenter(center, zoom)}
           title="Reset map to city center"
           aria-label="Reset map view"
-          className="absolute top-3 right-3 z-[450] px-2.5 py-1.5 rounded-xl bg-slate-950/85 hover:bg-slate-900 border border-slate-700/80 text-xs font-medium text-slate-300 hover:text-white shadow-lg backdrop-blur-md transition-all flex items-center gap-1.5"
+          className="absolute top-3 right-3 z-[450] px-2.5 py-1.5 rounded-xl bg-white/90 dark:bg-slate-950/85 hover:bg-white dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-700/80 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 shadow-md backdrop-blur-md transition-all flex items-center gap-1.5"
         >
-          <RotateCcw className="w-3.5 h-3.5 text-cyan-400" />
+          <RotateCcw className="w-3.5 h-3.5 text-indigo-600 dark:text-cyan-400" />
           <span>Reset view</span>
         </button>
       )}

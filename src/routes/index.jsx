@@ -10,6 +10,7 @@ const Safety = lazy(() => import('../pages/Safety').then(m => ({ default: m.Safe
 const Compare = lazy(() => import('../pages/Compare').then(m => ({ default: m.Compare })));
 const Insights = lazy(() => import('../pages/Insights').then(m => ({ default: m.Insights })));
 const ReportPage = lazy(() => import('../pages/ReportPage').then(m => ({ default: m.ReportPage })));
+const Profile = lazy(() => import('../pages/Profile').then(m => ({ default: m.Profile })));
 const Saved = lazy(() => import('../pages/Saved').then(m => ({ default: m.Saved })));
 const Settings = lazy(() => import('../pages/Settings').then(m => ({ default: m.Settings })));
 const About = lazy(() => import('../pages/About').then(m => ({ default: m.About })));
@@ -34,6 +35,7 @@ export const AppRoutes = () => {
         <Route path="/compare" element={<Compare />} />
         <Route path="/insights" element={<Insights />} />
         <Route path="/report" element={<ReportPage />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/saved" element={<Saved />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/about" element={<About />} />

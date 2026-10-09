@@ -4,9 +4,15 @@ import { DEFAULT_SCORING_WEIGHTS } from '../config/scoring.config';
 const SETTINGS_KEY = 'citypulse_settings';
 
 const initialSettings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+const defaultTheme = initialSettings.theme || 'light';
+
+// Ensure document root has correct class on initial script load
+if (typeof document !== 'undefined') {
+  document.documentElement.classList.toggle('dark', defaultTheme === 'dark');
+}
 
 export const useSettingsStore = create((set, get) => ({
-  theme: initialSettings.theme || 'dark',
+  theme: defaultTheme,
   distanceUnit: initialSettings.distanceUnit || 'km',
   scoringWeights: initialSettings.scoringWeights || DEFAULT_SCORING_WEIGHTS,
 

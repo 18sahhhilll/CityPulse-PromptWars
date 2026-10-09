@@ -8,22 +8,46 @@ export default {
   theme: {
     extend: {
       colors: {
-        dark: {
-          bg: '#0B1020',
-          card: 'rgba(15, 23, 42, 0.75)',
-          border: 'rgba(255, 255, 255, 0.08)',
-        },
         brand: {
-          violet: '#8B5CF6',
-          indigo: '#6366F1',
-          cyan: '#06B6D4',
-          pink: '#EC4899',
+          50:  '#f0f4ff',
+          100: '#e0eaff',
+          200: '#c7d7fd',
+          300: '#a5b8fc',
+          400: '#818cf8',
+          500: '#6366f1',   // primary indigo
+          600: '#4f46e5',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
+          violet: '#8b5cf6',
+          indigo: '#6366f1',
+          cyan:   '#06b6d4',
+          pink:   '#ec4899',
+        },
+        accent: {
+          pink:   '#ec4899',
+          violet: '#8b5cf6',
+          cyan:   '#06b6d4',
+          orange: '#f97316',
+          green:  '#10b981',
+          amber:  '#f59e0b',
+        },
+        surface: {
+          page:  '#f8fafc',   // main page background
+          card:  '#ffffff',   // card background
+          muted: '#f1f5f9',   // subtle section backgrounds
+          border:'#e2e8f0',   // borders
+        },
+        text: {
+          primary:   '#0f172a',
+          secondary: '#475569',
+          muted:     '#94a3b8',
         },
         pulse: {
-          safe: '#10B981',
-          caution: '#F59E0B',
-          danger: '#EF4444',
-          info: '#3B82F6',
+          safe: '#10b981',
+          caution: '#f59e0b',
+          danger: '#ef4444',
+          info: '#3b82f6',
         }
       },
       fontFamily: {
@@ -35,8 +59,8 @@ export default {
       },
       keyframes: {
         pulseGlow: {
-          '0%, 100%': { opacity: 0.8, filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.6))' },
-          '50%': { opacity: 1, filter: 'drop-shadow(0 0 16px rgba(6, 182, 212, 0.9))' },
+          '0%, 100%': { opacity: 0.8, filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.5))' },
+          '50%': { opacity: 1, filter: 'drop-shadow(0 0 16px rgba(139, 92, 246, 0.8))' },
         }
       }
     },

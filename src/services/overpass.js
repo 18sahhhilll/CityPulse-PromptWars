@@ -76,6 +76,17 @@ export const fetchPlacesOverpass = async (centerLat, centerLng, radiusMeters = 5
             rating: (4 + Math.random() * 0.9).toFixed(1),
             reviewsCount: Math.floor(Math.random() * 500 + 50),
             priceLevel: category === 'budget' ? '₹' : category === 'hotel' ? '₹₹₹' : '₹₹',
+            approxPrice: category === 'budget'
+              ? '₹300 - ₹800'
+              : category === 'hotel'
+              ? '₹3,000 - ₹8,000'
+              : category === 'food' || category === 'cafe'
+              ? '₹200 - ₹500'
+              : category === 'park'
+              ? '₹20 - ₹50'
+              : category === 'attraction'
+              ? '₹25 - ₹100'
+              : '₹100 - ₹400',
             openHours: el.tags.opening_hours || '09:00 AM - 09:00 PM',
             image: mockPlaces.find(m => m.category === category)?.image || mockPlaces[0].image,
             tags: [category.toUpperCase(), el.tags.cuisine || 'Local Spot'],

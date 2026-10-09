@@ -36,6 +36,8 @@
 - [x] Web Speech API voice recorder with speech-to-text transcription
 - [x] Dual storage handler (Supabase with IndexedDB / LocalStorage fallback)
 - [x] AI NLP classification pipeline (category validation, sentiment, severity 1–5, duplicate detection, verification score)
+- [x] Citizen Profile & Filed Reports tracking dashboard (`/profile` page with report management & badges)
+- [x] Report Submission Confirmation Popup with direct link to Profile
 - [x] Community Upvote / Confirmation verification system
 - [x] Insights Dashboard with Recharts (category distribution, time-of-day trends, AI city summary, alert banner)
 - [x] Social Pulse simulated feed with live sentiment breakdown
@@ -54,7 +56,8 @@
 
 ## Phase 7: Polish & Verification
 - [x] Framer Motion animations & page transition wrappers
-- [x] Responsive UI audit (Desktop top bar + mobile bottom navigation bar)
+- [x] Responsive UI audit (Desktop top bar de-congestion + location sub-bar + mobile bottom navigation bar)
 - [x] Accessibility pass (ARIA labels, keyboard navigation, contrast check)
 - [x] Error boundary & loading skeleton polish
+- [x] Theme Overhaul & Dark Background Purge (Light-first `#f8fafc` base, pre-paint DOM class sync, zero dark bg leaks)
 - [x] Final verification pass: Zero API key runtime check & full documentation update

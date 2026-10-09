@@ -28,22 +28,22 @@ export const Explore = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-100">
+              <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-slate-100">
                 Explore {currentCity.name}
               </h1>
               {isUsingFallback && (
                 <Badge variant="sample">Sample Data</Badge>
               )}
             </div>
-            <p className="text-xs text-slate-400 mt-1">Discover attractions, food, hotels, cafes & budget spots ({places.length} places available)</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Discover attractions, food, hotels, cafes & budget spots ({places.length} places available)</p>
           </div>
 
           {/* View Mode Switcher */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900 border border-slate-800 self-end">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm self-end">
             <button
               onClick={() => setViewMode('split')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${
-                viewMode === 'split' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                viewMode === 'split' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               Split View
@@ -51,7 +51,7 @@ export const Explore = () => {
             <button
               onClick={() => setViewMode('list')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${
-                viewMode === 'list' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                viewMode === 'list' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <List className="w-3.5 h-3.5" /> List
@@ -59,7 +59,7 @@ export const Explore = () => {
             <button
               onClick={() => setViewMode('map')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${
-                viewMode === 'map' ? 'bg-violet-600 text-white' : 'text-slate-400 hover:text-slate-200'
+                viewMode === 'map' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <Map className="w-3.5 h-3.5" /> Map
