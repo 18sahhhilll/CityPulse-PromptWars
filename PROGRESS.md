@@ -9,6 +9,13 @@
 
 ## Phased Dated Changelog
 
+### Git Commit & Push to Remote (2026-10-09)
+- **Work Built**:
+  - Staged all modified and untracked files (`src/components/auth/`, `src/pages/Profile.jsx`, `src/store/useAuthStore.js`, etc.).
+  - Created commit `04ac20d`: `"feat: full light theme rebuild, Supabase Auth integration, citizen profile, location bracket pricing, safety heatmap boost, and UI polish"`.
+  - Successfully pushed to remote repository `https://github.com/18sahhhilll/CityPulse-PromptWars.git` on branch `main`.
+- **Build Status**: Verified production build clean (`npm run build`).
+
 ### Safety Heatmap Opacity & Visibility Optimization Pass (2026-10-09)
 - **Root Cause**: Default Leaflet heat layer settings (`minOpacity: 0.05`, unscaled intensity) caused incident heatspots to render at 5% opacity, resulting in pale, translucent, hard-to-recognize spots on the Safety map.
 - **Work Built**:
