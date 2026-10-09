@@ -3,16 +3,16 @@ import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet.heat';
 
-export const HeatLayer = ({ points = [], radius = 25, blur = 15, max = 1.0 }) => {
+export const HeatLayer = ({ points = [], radius = 30, blur = 20, max = 1.0 }) => {
   const map = useMap();
 
   useEffect(() => {
     if (!points || points.length === 0 || !L.heatLayer) return;
 
-    // Convert points array [lat, lng, intensity]
+    // Convert points array into exact [lat, lng, intensity] format
     const heatPoints = points.map((pt) => {
       if (Array.isArray(pt)) return pt;
-      const intensity = (pt.severity || 3) / 5;
+      const intensity = Math.max(0.3, Math.min(1.0, (pt.severity || 3) / 5));
       return [pt.lat, pt.lng, intensity];
     });
 
@@ -33,7 +33,11 @@ export const HeatLayer = ({ points = [], radius = 25, blur = 15, max = 1.0 }) =>
     heatLayer.addTo(map);
 
     return () => {
-      map.removeLayer(heatLayer);
+      try {
+        map.removeLayer(heatLayer);
+      } catch (err) {
+        // Handle unmount cleanup gracefully
+      }
     };
   }, [map, points, radius, blur, max]);
 

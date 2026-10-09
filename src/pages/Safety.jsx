@@ -4,15 +4,14 @@ import { MapView } from '../components/map/MapView';
 import { MarkerLayer } from '../components/map/MarkerLayer';
 import { HeatLayer } from '../components/map/HeatLayer';
 import { RouteLayer } from '../components/map/RouteLayer';
-import { MapControls } from '../components/map/MapControls';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { useReportStore } from '../store/useReportStore';
 import { useCityStore } from '../store/useCityStore';
-import { fetchOSRMRoute } from '../services/routing';
+import { fetchOSRMAlternativeRoutes } from '../services/routing';
 import { evaluateRouteSafety, calculateAreaSafetyScore } from '../utils/safetyScore';
 import { APP_CONFIG } from '../config/app.config';
-import { ShieldAlert, PhoneCall, AlertTriangle, Moon, Navigation, CheckCircle2, ShieldCheck, Hospital, Shield } from 'lucide-react';
+import { ShieldAlert, PhoneCall, Moon, Navigation, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export const Safety = () => {
   const currentCity = useCityStore((state) => state.currentCity);
@@ -22,8 +21,8 @@ export const Safety = () => {
   const areaScore = calculateAreaSafetyScore(currentCity.lat, currentCity.lng, reports);
 
   // Safer Route Finder State
-  const [startQuery, setStartQuery] = useState('FC Road, Deccan');
-  const [destQuery, setDestQuery] = useState('Koregaon Park');
+  const [startQuery, setStartQuery] = useState('Akurdi, Pune');
+  const [destQuery, setDestQuery] = useState('Koregaon Park, Pune');
   const [routes, setRoutes] = useState([]);
   const [isSearchingRoute, setIsSearchingRoute] = useState(false);
 
@@ -31,32 +30,64 @@ export const Safety = () => {
     e.preventDefault();
     setIsSearchingRoute(true);
 
-    // Seeded route endpoints around Pune center
-    const origin = { lat: currentCity.lat - 0.015, lng: currentCity.lng - 0.015 };
-    const destination = { lat: currentCity.lat + 0.02, lng: currentCity.lng + 0.02 };
+    const waypoints = [
+      { lat: 18.6492, lng: 73.7634 }, // Akurdi
+      { lat: 18.5362, lng: 73.8940 }  // Koregaon Park
+    ];
 
-    const route1 = await fetchOSRMRoute([origin, destination], 'driving');
-    const route2 = await fetchOSRMRoute([
-      origin,
-      { lat: currentCity.lat + 0.01, lng: currentCity.lng - 0.01 },
-      destination
-    ], 'driving');
+    const rawRoutes = await fetchOSRMAlternativeRoutes(waypoints, 'driving');
 
-    const eval1 = evaluateRouteSafety(route1.coordinates, reports);
-    const eval2 = evaluateRouteSafety(route2.coordinates, reports);
+    // Evaluate each route's safety score using Haversine 300m polyline check
+    const evaluated = rawRoutes.map((rt) => {
+      const safetyEval = evaluateRouteSafety(rt.coordinates, reports);
+      return {
+        ...rt,
+        ...safetyEval,
+        isFastest: false,
+        isSafest: false,
+      };
+    });
 
-    const evaluatedRoutes = [
-      { ...route1, name: 'Route A (Main Arterial)', ...eval1, isFastest: true },
-      { ...route2, name: 'Route B (Well-Lit Bypass)', ...eval2, isFastest: false },
-    ].sort((a, b) => b.safetyScore - a.safetyScore);
+    if (evaluated.length > 0) {
+      // Find genuinely fastest route (lowest duration)
+      let minDurationIndex = 0;
+      let minDuration = evaluated[0].rawDurationSec || evaluated[0].durationMins * 60;
 
-    evaluatedRoutes[0].isSafest = true;
+      evaluated.forEach((r, idx) => {
+        const dur = r.rawDurationSec || r.durationMins * 60;
+        if (dur < minDuration) {
+          minDuration = dur;
+          minDurationIndex = idx;
+        }
+      });
 
-    setRoutes(evaluatedRoutes);
+      evaluated[minDurationIndex].isFastest = true;
+
+      // Find genuinely safest route (highest safety score)
+      let maxSafetyIndex = 0;
+      let maxSafety = evaluated[0].safetyScore;
+
+      evaluated.forEach((r, idx) => {
+        if (r.safetyScore > maxSafety) {
+          maxSafety = r.safetyScore;
+          maxSafetyIndex = idx;
+        }
+      });
+
+      evaluated[maxSafetyIndex].isSafest = true;
+    }
+
+    setRoutes(evaluated);
     setIsSearchingRoute(false);
   };
 
   const isNightTime = new Date().getHours() >= 20 || new Date().getHours() <= 5;
+
+  const getScoreBadgeColor = (score) => {
+    if (score >= 70) return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
+    if (score >= 40) return 'bg-amber-500/20 text-amber-400 border-amber-500/40';
+    return 'bg-rose-500/20 text-rose-400 border-rose-500/40';
+  };
 
   return (
     <PageShell>
@@ -68,7 +99,7 @@ export const Safety = () => {
             <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-100 flex items-center gap-2">
               <ShieldAlert className="w-7 h-7 text-rose-500" /> Safety & Security Center
             </h1>
-            <p className="text-xs text-slate-400">Live safety heatmaps, layer filters, OSRM safer route guidance & SOS emergency hotlines</p>
+            <p className="text-xs text-slate-400">Live safety heatmaps, incident layer filters, OSRM safer route guidance & SOS emergency hotlines</p>
           </div>
 
           <div className="flex items-center gap-3 p-3 rounded-2xl glass-panel border border-slate-800">
@@ -197,32 +228,39 @@ export const Safety = () => {
                 </div>
 
                 <Button type="submit" disabled={isSearchingRoute} variant="primary" className="w-full">
-                  {isSearchingRoute ? 'Scoring Routes...' : 'Calculate Safest Route'}
+                  {isSearchingRoute ? 'Calculating OSRM Routes...' : 'Find Safest Route Options'}
                 </Button>
               </form>
 
               {routes.length > 0 && (
                 <div className="space-y-3 pt-3 border-t border-slate-800">
-                  {routes.map((rt, idx) => (
+                  {routes.map((rt) => (
                     <div
-                      key={idx}
-                      className={`p-3 rounded-xl border text-xs space-y-1 ${
+                      key={rt.id}
+                      className={`p-3 rounded-xl border text-xs space-y-2 ${
                         rt.isSafest
                           ? 'bg-emerald-500/10 border-emerald-500/40 text-slate-100'
                           : 'bg-slate-900/60 border-slate-800 text-slate-300'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold">{rt.name}</span>
-                        {rt.isSafest && <Badge variant="verified">RECOMMENDED SAFEST</Badge>}
+                        <span className="font-bold text-slate-100 text-sm">{rt.name}</span>
+                        <div className="flex items-center gap-1">
+                          {rt.isSafest && <Badge variant="verified">RECOMMENDED SAFEST</Badge>}
+                          {rt.isFastest && <Badge variant="estimated">FASTEST</Badge>}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 text-slate-400">
-                        <span>Distance: {rt.distanceKm} km</span>
-                        <span>Est: {rt.durationMins} mins</span>
-                        <span className="font-bold text-emerald-400">Safety: {rt.safetyScore}%</span>
+
+                      <div className="flex items-center justify-between text-slate-300">
+                        <span>Distance: <strong>{rt.distanceKm} km</strong></span>
+                        <span>Est: <strong>{rt.durationMins} mins</strong></span>
+                        <span className={`px-2 py-0.5 rounded-lg text-xs font-bold border ${getScoreBadgeColor(rt.safetyScore)}`}>
+                          Safety: {rt.safetyScore}%
+                        </span>
                       </div>
-                      <p className="text-[11px] text-slate-400">
-                        {rt.isSafest ? 'Bypasses 2 unlit alleys and reported accident curve.' : 'Faster route, but passes near reported poorly lit underpass.'}
+
+                      <p className="text-[11px] text-slate-300 leading-relaxed font-medium">
+                        💡 {rt.explanation}
                       </p>
                     </div>
                   ))}
@@ -232,12 +270,12 @@ export const Safety = () => {
 
           </div>
 
-          {/* Right Panel: Interactive Safety Heatmap */}
+          {/* Right Panel: Interactive Safety Heatmap & Route Polylines */}
           <div className="lg:col-span-7 h-[650px]">
-            <MapView center={currentCity} zoom={13}>
+            <MapView center={currentCity} zoom={12}>
               {showHeatmap && <HeatLayer points={reports} radius={30} blur={20} />}
-              {routes.map((r, i) => (
-                <RouteLayer key={i} coordinates={r.coordinates} isSafest={r.isSafest} />
+              {routes.map((r) => (
+                <RouteLayer key={r.id} coordinates={r.coordinates} isSafest={r.isSafest} />
               ))}
             </MapView>
           </div>

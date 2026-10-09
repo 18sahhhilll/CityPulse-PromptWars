@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, ShieldAlert, History, BarChart3, Radio, Heart, Settings, Sun, Moon, MapPin, Search } from 'lucide-react';
+import { Compass, ShieldAlert, History, BarChart3, Radio, Heart, Sun, Moon, MapPin, Search } from 'lucide-react';
 import { useCityStore } from '../../store/useCityStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { searchCityNominatim } from '../../services/nominatim';
@@ -61,7 +61,7 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+        <Link to="/" className="flex items-center gap-2.5 group shrink-0" aria-label="CityPulse Home">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
               <Compass className="w-5 h-5 text-cyan-400 animate-pulse" />
@@ -87,13 +87,15 @@ export const Navbar = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(results.length > 0)}
               placeholder={`Search city (Current: ${currentCity.name})...`}
-              className="w-full pl-9 pr-24 py-1.5 bg-slate-900/80 hover:bg-slate-900 text-slate-100 text-sm rounded-xl border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-brand-violet/50 transition-all placeholder:text-slate-500"
+              aria-label="Search city name"
+              className="w-full pl-9 pr-24 py-1.5 bg-slate-900/80 hover:bg-slate-900 text-slate-100 text-sm rounded-xl border border-slate-700/60 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all placeholder:text-slate-500"
             />
             <button
               onClick={getCurrentLocation}
               disabled={geoLoading}
               title="Use my current GPS location"
-              className="absolute right-1.5 px-2 py-1 text-xs font-medium rounded-lg bg-violet-600/20 hover:bg-violet-600/40 text-violet-300 border border-violet-500/30 transition-all flex items-center gap-1"
+              aria-label="Use current GPS location"
+              className="absolute right-1.5 px-2 py-1 text-xs font-medium rounded-lg bg-violet-600/20 hover:bg-violet-600/40 text-violet-300 border border-violet-500/30 transition-all flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-violet-500"
             >
               <MapPin className="w-3 h-3 text-cyan-400" />
               <span>{geoLoading ? 'GPS...' : 'Near me'}</span>
@@ -107,7 +109,7 @@ export const Navbar = () => {
                 <button
                   key={idx}
                   onClick={() => handleSelectCity(item)}
-                  className="w-full px-4 py-2.5 text-left text-xs hover:bg-violet-600/20 border-b border-slate-800/60 last:border-none text-slate-200 transition-colors flex flex-col"
+                  className="w-full px-4 py-2.5 text-left text-xs hover:bg-violet-600/20 border-b border-slate-800/60 last:border-none text-slate-200 transition-colors flex flex-col focus-visible:ring-2 focus-visible:ring-violet-500"
                 >
                   <span className="font-semibold text-slate-100">{item.display_name.split(',')[0]}</span>
                   <span className="text-[11px] text-slate-400 truncate">{item.display_name}</span>
@@ -143,15 +145,17 @@ export const Navbar = () => {
         <div className="flex items-center gap-2">
           <Link
             to="/saved"
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-rose-400 border border-slate-800 transition-colors"
+            className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-rose-400 border border-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500"
             title="Saved places"
+            aria-label="View saved places"
           >
             <Heart className="w-4 h-4" />
           </Link>
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-800 transition-colors"
-            title="Toggle theme"
+            className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-amber-400 border border-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500"
+            title="Toggle dark/light theme"
+            aria-label="Toggle theme mode"
           >
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>

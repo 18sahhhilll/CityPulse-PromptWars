@@ -10,11 +10,22 @@ export const APP_CONFIG = {
     zoom: 13,
     boundingbox: [18.4, 18.6, 73.7, 74.0],
   },
-  mapTiles: {
-    cartoDark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    cartoLight: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-    osmFallback: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  mapTilePriorities: {
+    maptiler: {
+      dark: (key) => `https://api.maptiler.com/maps/dataviz-dark/{z}/{x}/{y}.png?key=${key}`,
+      light: (key) => `https://api.maptiler.com/maps/dataviz/{z}/{x}/{y}.png?key=${key}`,
+      attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+    stadia: {
+      dark: (key) => `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png${key ? `?api_key=${key}` : ''}`,
+      light: (key) => `https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png${key ? `?api_key=${key}` : ''}`,
+      attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+    osm: {
+      dark: () => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      light: () => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
   },
   apiEndpoints: {
     nominatim: 'https://nominatim.openstreetmap.org',

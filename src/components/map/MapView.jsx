@@ -21,18 +21,33 @@ export const MapView = ({
   className = 'h-full w-full min-h-[400px]',
 }) => {
   const { theme } = useSettingsStore();
-  const [useOsmFallback, setUseOsmFallback] = useState(false);
 
-  const cartoApiKey = import.meta.env.VITE_CARTO_KEY || import.meta.env.VITE_CARTO_API_KEY || 'cb1_4f0r_1_0b93d5b8f1e4b20459859d1c';
-  const keyQuery = cartoApiKey ? `?key=${cartoApiKey}` : '';
+  const maptilerKey = import.meta.env.VITE_MAPTILER_KEY;
+  const stadiaKey = import.meta.env.VITE_STADIA_KEY;
 
-  let tileUrl = useOsmFallback
-    ? APP_CONFIG.mapTiles.osmFallback
-    : theme === 'dark'
-    ? `${APP_CONFIG.mapTiles.cartoDark}${keyQuery}`
-    : `${APP_CONFIG.mapTiles.cartoLight}${keyQuery}`;
+  // Initial Priority Level:
+  // Level 1: MapTiler if key present
+  // Level 2: Stadia
+  // Level 3: OSM (with dark mode CSS filter)
+  const initialPriority = maptilerKey ? 1 : 2;
+  const [priorityLevel, setPriorityLevel] = useState(initialPriority);
+
+  let currentTileConfig = APP_CONFIG.mapTilePriorities.maptiler;
+  let tileUrl = '';
+
+  if (priorityLevel === 1 && maptilerKey) {
+    currentTileConfig = APP_CONFIG.mapTilePriorities.maptiler;
+    tileUrl = theme === 'dark' ? currentTileConfig.dark(maptilerKey) : currentTileConfig.light(maptilerKey);
+  } else if (priorityLevel <= 2) {
+    currentTileConfig = APP_CONFIG.mapTilePriorities.stadia;
+    tileUrl = theme === 'dark' ? currentTileConfig.dark(stadiaKey) : currentTileConfig.light(stadiaKey);
+  } else {
+    currentTileConfig = APP_CONFIG.mapTilePriorities.osm;
+    tileUrl = theme === 'dark' ? currentTileConfig.dark() : currentTileConfig.light();
+  }
 
   const defaultCenter = [center?.lat || 18.5204, center?.lng || 73.8567];
+  const isOsmDarkFallback = priorityLevel === 3 && theme === 'dark';
 
   return (
     <div className={`relative rounded-2xl overflow-hidden border border-slate-800 shadow-xl ${className}`}>
@@ -41,17 +56,19 @@ export const MapView = ({
         zoom={zoom}
         scrollWheelZoom={true}
         zoomControl={false}
-        className={`w-full h-full z-10 ${theme === 'dark' && useOsmFallback ? 'dark-map-filter' : ''}`}
+        attributionControl={true}
+        className={`w-full h-full z-10 ${isOsmDarkFallback ? 'dark-map-filter' : ''}`}
       >
         <TileLayer
+          key={`${priorityLevel}-${theme}`}
           url={tileUrl}
-          attribution={APP_CONFIG.mapTiles.attribution}
+          attribution={currentTileConfig.attribution}
           maxZoom={19}
           eventHandlers={{
             tileerror: () => {
-              if (!useOsmFallback) {
-                console.warn('CARTO map tile load error; engaging OpenStreetMap tile fallback.');
-                setUseOsmFallback(true);
+              if (priorityLevel < 3) {
+                console.warn(`Tile load error on priority level ${priorityLevel}; stepping down map priority.`);
+                setPriorityLevel((prev) => Math.min(prev + 1, 3));
               }
             }
           }}
