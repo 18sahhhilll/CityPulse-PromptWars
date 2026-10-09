@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Star, MapPin, Heart } from 'lucide-react';
 import { useFavoriteStore } from '../../store/useFavoriteStore';
+import { useMapStore } from '../../store/useMapStore';
 import { Badge } from '../ui/Badge';
 import { getScoreBadge } from '../../utils/scoring';
 import { resolvePlaceImage } from '../../services/imageResolver';
 
-export const PlaceCard = ({ place, isCompact = false }) => {
+export const PlaceCard = ({ place, isSelected = false }) => {
+  const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavoriteStore();
+  const { flyToPlace, closeActivePopup, hoveredPlaceId } = useMapStore();
+
   const bookmarked = isFavorite(place.id);
+  const isHovered = hoveredPlaceId === place.id || isSelected;
   const scoreInfo = getScoreBadge(place.scores?.safety || 85);
 
   const [imgData, setImgData] = useState({ src: place.image || '', source: 'curated' });
@@ -23,11 +29,39 @@ export const PlaceCard = ({ place, isCompact = false }) => {
     return () => { mounted = false; };
   }, [place]);
 
+  const handleMouseEnter = () => {
+    flyToPlace(place, 15);
+  };
+
+  const handleMouseLeave = () => {
+    closeActivePopup();
+  };
+
+  const handleClick = () => {
+    flyToPlace(place, 15);
+    navigate(`/explore/${place.id}`);
+  };
+
+  const handleViewOnMapOnly = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    flyToPlace(place, 15);
+  };
+
   const isSampleScore = place.isSample || place.id.startsWith('osm-') || !place.liveSafetyScore;
 
   return (
-    <div className="glass-panel glass-panel-hover rounded-2xl overflow-hidden border border-slate-800 flex flex-col h-full group">
-      {/* Image Thumbnail Header with Fixed Aspect Ratio (16:9) */}
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
+      className={`glass-panel rounded-2xl overflow-hidden border border-slate-800 flex flex-col h-full group cursor-pointer transition-all duration-300 ${
+        isHovered ? 'ring-2 ring-violet-500/60 shadow-xl shadow-violet-500/10' : 'hover:border-violet-500/40'
+      }`}
+    >
+      {/* Image Thumbnail Header */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
         <img
           src={imgData.src}
@@ -36,24 +70,35 @@ export const PlaceCard = ({ place, isCompact = false }) => {
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
           onError={(e) => {
-            // Fallback to category vector SVG placeholder if image network load fails
             e.target.dataset.imgSource = 'category_placeholder';
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
 
-        {/* Favorite Bookmark Button */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleFavorite(place.id);
-          }}
-          className="absolute top-3 right-3 p-2 rounded-xl bg-slate-950/70 backdrop-blur-md border border-slate-700/60 text-slate-300 hover:text-rose-400 transition-colors z-10"
-          aria-label="Bookmark place"
-        >
-          <Heart className={`w-4 h-4 ${bookmarked ? 'fill-rose-500 text-rose-500' : ''}`} />
-        </button>
+        {/* Top-Right Action Buttons: View on Map & Bookmark */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+          <button
+            onClick={handleViewOnMapOnly}
+            className="p-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-cyan-400 hover:bg-violet-600/40 hover:text-white transition-colors"
+            title="View on map"
+            aria-label="View on map"
+          >
+            <MapPin className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleFavorite(place.id);
+            }}
+            className="p-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-slate-300 hover:text-rose-400 transition-colors"
+            title="Bookmark place"
+            aria-label="Bookmark place"
+          >
+            <Heart className={`w-3.5 h-3.5 ${bookmarked ? 'fill-rose-500 text-rose-500' : ''}`} />
+          </button>
+        </div>
 
         {/* Category & Budget Badges */}
         <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-1.5">
@@ -73,12 +118,9 @@ export const PlaceCard = ({ place, isCompact = false }) => {
       <div className="p-4 flex-1 flex flex-col justify-between gap-3">
         <div>
           <div className="flex items-start justify-between gap-2 mb-1">
-            <Link to={`/explore/${place.id}`}>
-              {/* Allow up to 2 lines for place name */}
-              <h3 className="font-bold text-base font-display text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-2 leading-snug">
-                {place.name}
-              </h3>
-            </Link>
+            <h3 className="font-bold text-base font-display text-slate-100 group-hover:text-cyan-400 transition-colors line-clamp-2 leading-snug">
+              {place.name}
+            </h3>
             <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400 shrink-0 mt-0.5">
               <Star className="w-3.5 h-3.5 fill-amber-400" />
               {place.rating}
@@ -97,14 +139,11 @@ export const PlaceCard = ({ place, isCompact = false }) => {
             Safety: {place.scores?.safety || 85}%
             {isSampleScore && <sup className="ml-0.5 text-[9px] font-normal opacity-80 text-amber-300">sample</sup>}
           </span>
-          <Link
-            to={`/explore/${place.id}`}
-            className="text-cyan-400 font-semibold hover:underline"
-          >
+          <span className="text-cyan-400 font-semibold flex items-center gap-1 group-hover:underline">
             Details →
-          </Link>
+          </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

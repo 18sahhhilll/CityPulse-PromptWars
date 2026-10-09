@@ -105,13 +105,11 @@ export const Explore = () => {
                     : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                 }`}>
                   {places.map((place) => (
-                    <div
+                    <PlaceCard
                       key={place.id}
-                      onClick={() => setSelectedPlaceId(place.id)}
-                      className={`cursor-pointer transition-transform ${selectedPlaceId === place.id ? 'ring-2 ring-violet-500 rounded-2xl' : ''}`}
-                    >
-                      <PlaceCard place={place} />
-                    </div>
+                      place={place}
+                      isSelected={selectedPlaceId === place.id}
+                    />
                   ))}
                 </div>
               </div>

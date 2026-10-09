@@ -11,15 +11,15 @@ export const APP_CONFIG = {
     boundingbox: [18.4, 18.6, 73.7, 74.0],
   },
   mapTilePriorities: {
-    maptiler: {
-      dark: (key) => `https://api.maptiler.com/maps/dataviz-dark/{z}/{x}/{y}.png?key=${key}`,
-      light: (key) => `https://api.maptiler.com/maps/dataviz/{z}/{x}/{y}.png?key=${key}`,
-      attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    carto: {
+      dark: (key) => `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png${key ? `?key=${key}` : ''}`,
+      light: (key) => `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png${key ? `?key=${key}` : ''}`,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
     },
-    stadia: {
-      dark: (key) => `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png${key ? `?api_key=${key}` : ''}`,
-      light: (key) => `https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png${key ? `?api_key=${key}` : ''}`,
-      attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maptiler: {
+      dark: (key) => `https://api.maptiler.com/maps/dataviz-dark/256/{z}/{x}/{y}.png?key=${key}`,
+      light: (key) => `https://api.maptiler.com/maps/dataviz/256/{z}/{x}/{y}.png?key=${key}`,
+      attribution: '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
     osm: {
       dark: () => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

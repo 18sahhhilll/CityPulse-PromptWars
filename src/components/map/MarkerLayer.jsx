@@ -2,9 +2,9 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { PLACE_CATEGORIES } from '../../config/categories';
-import { Star, MapPin, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Star, MapPin, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Badge } from '../ui/Badge';
+import { useMapStore } from '../../store/useMapStore';
 
 const createCategoryIcon = (category, isSelected = false) => {
   const catConfig = PLACE_CATEGORIES.find((c) => c.id === category) || PLACE_CATEGORIES[0];
@@ -40,10 +40,13 @@ const createCategoryIcon = (category, isSelected = false) => {
 };
 
 export const MarkerLayer = ({ places = [], selectedPlaceId, onSelectPlace }) => {
+  const registerMarker = useMapStore((state) => state.registerMarker);
+  const hoveredPlaceId = useMapStore((state) => state.hoveredPlaceId);
+
   return (
     <>
       {places.map((place) => {
-        const isSelected = place.id === selectedPlaceId;
+        const isSelected = place.id === selectedPlaceId || place.id === hoveredPlaceId;
         const icon = createCategoryIcon(place.category, isSelected);
 
         return (
@@ -51,6 +54,11 @@ export const MarkerLayer = ({ places = [], selectedPlaceId, onSelectPlace }) => 
             key={place.id}
             position={[place.lat, place.lng]}
             icon={icon}
+            ref={(markerInstance) => {
+              if (markerInstance) {
+                registerMarker(place.id, markerInstance);
+              }
+            }}
             eventHandlers={{
               click: () => onSelectPlace && onSelectPlace(place),
             }}

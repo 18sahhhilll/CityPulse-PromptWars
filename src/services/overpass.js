@@ -44,6 +44,28 @@ export const fetchPlacesOverpass = async (centerLat, centerLng, radiusMeters = 5
             ? 'park'
             : 'attraction';
 
+          const areaName = el.tags['addr:suburb'] || el.tags['addr:street'] || 'Pune';
+          const cuisineTag = el.tags.cuisine ? `specializing in ${el.tags.cuisine}` : 'offering great local menu choices';
+          let generatedDescription = el.tags.description;
+
+          if (!generatedDescription) {
+            if (category === 'food' || category === 'cafe') {
+              generatedDescription = `A popular ${category} spot in ${areaName}, ${cuisineTag}.`;
+            } else if (category === 'park') {
+              generatedDescription = `A peaceful green park and recreational space in ${areaName}.`;
+            } else if (category === 'attraction') {
+              generatedDescription = `A prominent cultural attraction and historical landmark in ${areaName}.`;
+            } else if (category === 'hotel' || category === 'budget') {
+              generatedDescription = `Comfortable lodging and accommodation in ${areaName}.`;
+            } else if (category === 'hospital') {
+              generatedDescription = `Healthcare facility and emergency medical services in ${areaName}.`;
+            } else if (category === 'police') {
+              generatedDescription = `Local emergency police station and safety unit in ${areaName}.`;
+            } else {
+              generatedDescription = `A popular ${category} destination located in ${areaName}.`;
+            }
+          }
+
           return {
             id: `osm-${el.id}`,
             name: el.tags.name || el.tags['name:en'] || 'Local Landmark',
@@ -65,7 +87,7 @@ export const fetchPlacesOverpass = async (centerLat, centerLng, radiusMeters = 5
               accessibility: 85,
             },
             isBudget: category === 'budget' || el.tags.tourism === 'hostel',
-            description: el.tags.description || `${el.tags.name || 'Points of interest'} listed on OpenStreetMap.`,
+            description: generatedDescription,
           };
         });
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, ShieldAlert, History, BarChart3, Radio, Heart, Sun, Moon, MapPin, Search } from 'lucide-react';
+import { Compass, ShieldAlert, History, BarChart3, Radio, Heart, Sun, Moon, MapPin, Search, Plus } from 'lucide-react';
 import { useCityStore } from '../../store/useCityStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { searchCityNominatim } from '../../services/nominatim';
@@ -141,8 +141,15 @@ export const Navbar = () => {
           })}
         </nav>
 
-        {/* Action Controls (Favorites & Theme toggle) */}
+        {/* Action Controls (Report, Favorites & Theme toggle) */}
         <div className="flex items-center gap-2">
+          <Link
+            to="/report"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-violet-600/30 to-indigo-600/30 hover:from-violet-600/40 hover:to-indigo-600/40 text-cyan-300 border border-violet-500/40 text-xs font-semibold shadow-sm transition-all"
+          >
+            <Plus className="w-3.5 h-3.5 text-cyan-400" />
+            <span>File Report</span>
+          </Link>
           <Link
             to="/saved"
             className="p-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-rose-400 border border-slate-800 transition-colors focus-visible:ring-2 focus-visible:ring-violet-500"

@@ -6,13 +6,18 @@ import { Badge } from '../components/ui/Badge';
 import { usePlaces } from '../hooks/usePlaces';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { calculateCompositeScore, getScoreBadge } from '../utils/scoring';
-import { BarChart3, Sliders, Trophy, AlertTriangle, Sparkles, Check } from 'lucide-react';
+import { BarChart3, Sliders, Trophy, AlertTriangle, Sparkles, Check, Search, X, MapPin, Plus } from 'lucide-react';
 
 export const Compare = () => {
   const { allPlaces } = usePlaces();
   const { scoringWeights, setScoringWeights, resetWeights } = useSettingsStore();
 
-  const [selectedIds, setSelectedIds] = useState([allPlaces[0]?.id || 'place-001', allPlaces[1]?.id || 'place-002']);
+  const [selectedIds, setSelectedIds] = useState([
+    allPlaces[0]?.id || 'place-001',
+    allPlaces[1]?.id || 'place-002',
+  ]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const selectedPlaces = allPlaces.filter((p) => selectedIds.includes(p.id));
 
@@ -32,6 +37,18 @@ export const Compare = () => {
     const updated = { ...scoringWeights, [key]: parseFloat(val) };
     setScoringWeights(updated);
   };
+
+  // Filter matching places based on search query
+  const filteredPlaces = allPlaces.filter((p) => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return true;
+    return (
+      p.name.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      (p.address && p.address.toLowerCase().includes(q)) ||
+      (p.description && p.description.toLowerCase().includes(q))
+    );
+  });
 
   // Compute leaderboards
   const placesWithScores = allPlaces.map((p) => ({
@@ -56,27 +73,126 @@ export const Compare = () => {
           </div>
         </div>
 
-        {/* Place Selection Bar */}
-        <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-3">
-          <h3 className="text-sm font-bold font-display text-slate-100">Select Places to Compare (Choose 2 to 4)</h3>
-          <div className="flex flex-wrap gap-2">
-            {allPlaces.map((p) => {
-              const isSelected = selectedIds.includes(p.id);
-              return (
+        {/* Place Search & Selection Panel */}
+        <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="text-sm font-bold font-display text-slate-100 flex items-center gap-2">
+              <Search className="w-4 h-4 text-cyan-400" /> Select Locations to Compare ({selectedIds.length}/4 Selected)
+            </h3>
+            <span className="text-[11px] font-medium text-slate-400">
+              Choose 2 to 4 locations
+            </span>
+          </div>
+
+          {/* Currently Selected Badges Bar */}
+          <div className="flex flex-wrap items-center gap-2">
+            {selectedPlaces.map((p) => (
+              <div
+                key={p.id}
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white border border-violet-400/50 shadow-md flex items-center gap-2 group transition-all"
+              >
+                <span className="truncate max-w-[180px]">{p.name}</span>
+                {selectedIds.length > 2 ? (
+                  <button
+                    onClick={() => toggleSelectPlace(p.id)}
+                    className="p-0.5 hover:bg-white/20 rounded-full transition-colors shrink-0"
+                    title={`Remove ${p.name}`}
+                  >
+                    <X className="w-3.5 h-3.5 text-white" />
+                  </button>
+                ) : (
+                  <span className="text-[10px] text-violet-200 font-normal shrink-0" title="Minimum 2 locations required">(Min 2)</span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Location Search Bar & Autocomplete Dropdown */}
+          <div className="relative">
+            <div className="relative flex items-center">
+              <Search className="w-4 h-4 absolute left-3.5 text-slate-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setIsDropdownOpen(true);
+                }}
+                onFocus={() => setIsDropdownOpen(true)}
+                placeholder="Search location by name, category or area (e.g. Shaniwar Wada, Goodluck Cafe, Marriott)..."
+                className="w-full pl-10 pr-10 py-2.5 bg-slate-900/90 text-slate-100 text-xs sm:text-sm rounded-xl border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all placeholder:text-slate-500 shadow-inner"
+              />
+              {searchQuery && (
                 <button
-                  key={p.id}
-                  onClick={() => toggleSelectPlace(p.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
-                    isSelected
-                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-400/50 shadow-md'
-                      : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200'
-                  }`}
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 text-slate-400 hover:text-white"
                 >
-                  <span>{p.name}</span>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                  <X className="w-4 h-4" />
                 </button>
-              );
-            })}
+              )}
+            </div>
+
+            {/* Dropdown Results List */}
+            {isDropdownOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-20"
+                  onClick={() => setIsDropdownOpen(false)}
+                />
+                <div className="absolute top-full left-0 right-0 mt-2 glass-panel rounded-xl border border-slate-700/80 shadow-2xl overflow-hidden z-30 max-h-72 overflow-y-auto">
+                  {filteredPlaces.length === 0 ? (
+                    <div className="p-4 text-center text-xs text-slate-400">
+                      No matching locations found for "{searchQuery}"
+                    </div>
+                  ) : (
+                    filteredPlaces.map((p) => {
+                      const isSelected = selectedIds.includes(p.id);
+                      const isMaxReached = selectedIds.length >= 4 && !isSelected;
+
+                      return (
+                        <button
+                          key={p.id}
+                          disabled={isMaxReached}
+                          onClick={() => {
+                            toggleSelectPlace(p.id);
+                          }}
+                          className={`w-full px-4 py-2.5 text-left text-xs border-b border-slate-800/60 last:border-none transition-colors flex items-center justify-between ${
+                            isSelected
+                              ? 'bg-violet-600/20 text-cyan-300 font-semibold'
+                              : isMaxReached
+                              ? 'opacity-40 cursor-not-allowed bg-slate-900/40 text-slate-500'
+                              : 'hover:bg-slate-800/60 text-slate-200'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                            <div className="truncate">
+                              <span className="font-semibold block text-slate-100 truncate">{p.name}</span>
+                              <span className="text-[10px] text-slate-400 truncate">{p.address} • {p.category.toUpperCase()}</span>
+                            </div>
+                          </div>
+                          <div className="shrink-0 ml-2">
+                            {isSelected ? (
+                              <span className="px-2.5 py-1 rounded-lg text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 font-bold">
+                                <Check className="w-3 h-3" /> Selected
+                              </span>
+                            ) : isMaxReached ? (
+                              <span className="px-2.5 py-1 rounded-lg text-[10px] bg-slate-800/60 text-slate-500 font-medium">
+                                Max 4
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-lg text-[10px] bg-violet-600/30 hover:bg-violet-600 text-violet-200 hover:text-white border border-violet-500/40 transition-colors font-semibold flex items-center gap-1">
+                                <Plus className="w-3 h-3" /> Add
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
