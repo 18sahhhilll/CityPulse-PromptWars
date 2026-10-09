@@ -22,11 +22,11 @@ export const MapView = ({
 }) => {
   const { theme } = useSettingsStore();
 
-  const maptilerKey = import.meta.env.VITE_MAPTILER_KEY;
+  const maptilerKey = import.meta.env.VITE_MAPTILER_KEY || import.meta.env.VITE_MAPTILER_API_KEY;
   const stadiaKey = import.meta.env.VITE_STADIA_KEY;
 
   // Initial Priority Level:
-  // Level 1: MapTiler if key present
+  // Level 1: MapTiler (if env key present)
   // Level 2: Stadia
   // Level 3: OSM (with dark mode CSS filter)
   const initialPriority = maptilerKey ? 1 : 2;
