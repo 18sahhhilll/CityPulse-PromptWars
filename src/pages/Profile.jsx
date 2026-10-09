@@ -41,7 +41,6 @@ export const Profile = () => {
   const { user, initialize, signOut } = useAuthStore();
 
   const [activeTab, setActiveTab] = useState('reports'); // 'reports', 'saved', 'achievements'
-  const [showDemoReports, setShowDemoReports] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState('signin');
 
@@ -49,11 +48,9 @@ export const Profile = () => {
     initialize();
   }, [initialize]);
 
-  // Filter user-submitted reports
+  // Only show reports the user actually filed — never show seeded sample data
   const userSubmittedReports = reports.filter((r) => r.id && r.id.startsWith('user-'));
-  const displayedReports = showDemoReports || userSubmittedReports.length === 0
-    ? reports
-    : userSubmittedReports;
+  const displayedReports = userSubmittedReports;
 
   // Compute profile statistics
   const totalUpvotesReceived = userSubmittedReports.reduce((acc, r) => acc + (r.upvotes || 1), 0);
@@ -293,17 +290,6 @@ export const Profile = () => {
               <span>Civic Badges (4)</span>
             </button>
           </div>
-
-          {/* Demo Toggle for Testing */}
-          {activeTab === 'reports' && userSubmittedReports.length === 0 && (
-            <button
-              onClick={() => setShowDemoReports(!showDemoReports)}
-              className="text-xs text-indigo-600 dark:text-cyan-400 font-semibold hover:underline flex items-center gap-1"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              {showDemoReports ? 'Showing All Reports' : 'Toggle Sample Demonstration Data'}
-            </button>
-          )}
         </div>
 
         {/* TAB 1: MY FILED REPORTS */}
