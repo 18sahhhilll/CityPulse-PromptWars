@@ -88,138 +88,146 @@ export const Profile = () => {
     <PageShell>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        {/* Profile Banner & Header Card */}
-        <div className="relative rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
-          {/* Top Gradient Background */}
-          <div className="h-32 bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 p-6 flex justify-between items-start">
-            <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
-              {user ? (user.isSupabase ? 'Supabase Authenticated Profile' : 'Citizen Active Profile') : 'Guest Session'}
-            </span>
+        {/* ── Profile Banner Card ── */}
+        <div className="rounded-3xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
 
+          {/* Cover gradient with decorative blobs */}
+          <div className="relative h-44 bg-gradient-to-br from-indigo-600 via-violet-600 to-pink-500 overflow-hidden">
+            {/* Decorative blobs */}
+            <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
+            <div className="absolute -bottom-12 right-10 w-56 h-56 rounded-full bg-pink-400/20 blur-3xl" />
+            <div className="absolute top-4 right-1/3 w-32 h-32 rounded-full bg-violet-300/10 blur-2xl" />
+
+            {/* Top-left status chip */}
+            <div className="absolute top-4 left-5 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+              {user
+                ? user.isSupabase ? 'Verified Citizen' : 'Active Profile'
+                : 'Guest Session'}
+            </div>
+
+            {/* Sign out top-right */}
             {user && (
               <button
                 onClick={signOut}
-                className="px-3 py-1 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
-                title="Sign out of account"
+                className="absolute top-4 right-5 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/20 text-white text-xs font-semibold transition-all"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>Sign Out</span>
+                Sign Out
               </button>
             )}
           </div>
 
-          {/* Profile Details Container */}
-          <div className="px-6 pb-6 pt-0 relative flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 -mt-12">
-            
-            {/* Avatar & User Details */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-pink-500 p-1 shadow-xl">
-                  <div className="w-full h-full bg-white dark:bg-slate-900 rounded-[14px] flex items-center justify-center text-indigo-600 dark:text-cyan-400 font-bold text-2xl font-display">
-                    {user ? getInitials(user.fullName) : <User className="w-10 h-10 text-slate-400" />}
+          {/* Avatar + Info row — sits just below cover */}
+          <div className="px-6 pb-0">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 mb-5">
+
+              {/* Avatar */}
+              <div className="flex items-end gap-4">
+                <div className="relative shrink-0">
+                  <div className="w-24 h-24 rounded-2xl ring-4 ring-white dark:ring-slate-900 bg-gradient-to-br from-indigo-500 via-violet-500 to-pink-500 flex items-center justify-center shadow-xl">
+                    {user
+                      ? <span className="text-white font-extrabold text-2xl tracking-tight">{getInitials(user.fullName)}</span>
+                      : <User className="w-10 h-10 text-white/80" />
+                    }
                   </div>
+                  {user && (
+                    <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-md">
+                      <CheckCircle2 className="w-4 h-4 text-white" />
+                    </div>
+                  )}
                 </div>
-                {user && (
-                  <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-emerald-500 text-white border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-md" title="Active Verified Account">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                )}
+
+                {/* Name & meta — only visible sm+ beside avatar */}
+                <div className="hidden sm:block pb-1">
+                  {user ? (
+                    <>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h1 className="text-xl font-extrabold text-slate-900 dark:text-slate-100 leading-tight">
+                          {user.fullName}
+                        </h1>
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold border border-emerald-200 dark:border-emerald-500/30">
+                          {getCivicLevel(userSubmittedReports.length)}
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 flex-wrap">
+                        <span className="font-medium text-indigo-600 dark:text-indigo-400">{user.email}</span>
+                        <span className="text-slate-300 dark:text-slate-600">|</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-violet-500" />{currentCity.name}, MH</span>
+                        <span className="text-slate-300 dark:text-slate-600">|</span>
+                        <span className="flex items-center gap-1"><Calendar className="w-3 h-3 text-pink-500" />Joined {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <h1 className="text-xl font-extrabold text-slate-900 dark:text-slate-100">Guest Citizen</h1>
+                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Sign in to unlock your citizen profile & stats</p>
+                    </>
+                  )}
+                </div>
               </div>
 
-              <div>
+              {/* CTA button */}
+              <div className="shrink-0 self-start sm:self-auto mt-2 sm:mt-0 pb-1">
                 {user ? (
-                  <>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h1 className="text-2xl font-bold font-display text-slate-900 dark:text-slate-100">
-                        {user.fullName}
-                      </h1>
-                      <Badge variant="verified">{getCivicLevel(userSubmittedReports.length)}</Badge>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
-                      <span className="font-semibold text-indigo-600 dark:text-indigo-400">{user.email}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-indigo-500" /> {currentCity.name}, MH
-                      </span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3.5 h-3.5 text-violet-500" /> Joined {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                      </span>
-                    </p>
-                  </>
+                  <Link
+                    to="/report"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    File New Report
+                  </Link>
                 ) : (
-                  <>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h1 className="text-2xl font-bold font-display text-slate-900 dark:text-slate-100">
-                        Guest Citizen
-                      </h1>
-                      <Badge variant="estimated">Unauthenticated</Badge>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-2">
-                      <span>Sign in with Supabase Auth to unlock citizen verification & profile stats.</span>
-                    </p>
-                  </>
+                  <button
+                    onClick={() => openAuth('signin')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Sign In / Register
+                  </button>
                 )}
               </div>
             </div>
 
-            {/* Quick Action Button */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* Mobile name (below avatar on xs screens) */}
+            <div className="sm:hidden mb-4">
               {user ? (
-                <Link
-                  to="/report"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5"
-                >
-                  <Plus className="w-4 h-4 text-white" />
-                  <span>File New Report</span>
-                </Link>
+                <>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h1 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">{user.fullName}</h1>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold border border-emerald-200 dark:border-emerald-500/30">
+                      {getCivicLevel(userSubmittedReports.length)}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    <span className="font-medium text-indigo-600 dark:text-indigo-400">{user.email}</span>
+                  </p>
+                </>
               ) : (
-                <button
-                  onClick={() => openAuth('signin')}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center gap-1.5"
-                >
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In / Register</span>
-                </button>
+                <>
+                  <h1 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">Guest Citizen</h1>
+                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Sign in to unlock your citizen profile & stats</p>
+                </>
               )}
             </div>
           </div>
 
-          {/* Profile Quick Stats Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 divide-x divide-slate-100 dark:divide-slate-800 text-center py-4">
-            <div className="p-2">
-              <div className="text-xl sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 font-display">
-                {userSubmittedReports.length}
+          {/* Stats bar */}
+          <div className="grid grid-cols-4 border-t border-slate-100 dark:border-slate-800">
+            {[
+              { label: 'Reports Filed', value: userSubmittedReports.length, icon: <FileText className="w-4 h-4" />, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
+              { label: 'Community Upvotes', value: totalUpvotesReceived, icon: <ThumbsUp className="w-4 h-4" />, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-50 dark:bg-violet-500/10' },
+              { label: 'AI Trust Score', value: user ? '96%' : '—', icon: <Sparkles className="w-4 h-4" />, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+              { label: 'Civic Impact', value: user ? 'Top 5%' : '—', icon: <Zap className="w-4 h-4" />, color: 'text-pink-600 dark:text-pink-400', bg: 'bg-pink-50 dark:bg-pink-500/10' },
+            ].map((stat, i) => (
+              <div key={i} className={`flex flex-col items-center justify-center gap-1.5 py-5 ${i < 3 ? 'border-r border-slate-100 dark:border-slate-800' : ''}`}>
+                <div className={`w-8 h-8 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center`}>
+                  {stat.icon}
+                </div>
+                <div className={`text-xl font-extrabold ${stat.color}`}>{stat.value}</div>
+                <div className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider text-center leading-tight">{stat.label}</div>
               </div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Reports Filed
-              </div>
-            </div>
-            <div className="p-2">
-              <div className="text-xl sm:text-2xl font-extrabold text-violet-600 dark:text-violet-400 font-display">
-                {totalUpvotesReceived}
-              </div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Community Upvotes
-              </div>
-            </div>
-            <div className="p-2">
-              <div className="text-xl sm:text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-display">
-                {user ? '96%' : '--'}
-              </div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                AI Trust Score
-              </div>
-            </div>
-            <div className="p-2">
-              <div className="text-xl sm:text-2xl font-extrabold text-pink-600 dark:text-pink-400 font-display">
-                {user ? 'Top 5%' : '--'}
-              </div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Civic Impact
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
