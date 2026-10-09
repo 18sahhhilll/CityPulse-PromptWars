@@ -6,6 +6,7 @@ import { MapView } from '../components/map/MapView';
 import { MarkerLayer } from '../components/map/MarkerLayer';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Skeleton } from '../components/ui/Skeleton';
+import { Badge } from '../components/ui/Badge';
 import { usePlaces } from '../hooks/usePlaces';
 import { useCityStore } from '../store/useCityStore';
 import { useFilterStore } from '../store/useFilterStore';
@@ -13,8 +14,8 @@ import { Map, List, Tag, SlidersHorizontal } from 'lucide-react';
 
 export const Explore = () => {
   const currentCity = useCityStore((state) => state.currentCity);
-  const { places, loading } = usePlaces();
-  const { budgetMode, setBudgetMode, resetFilters } = useFilterStore();
+  const { places, loading, isUsingFallback } = usePlaces();
+  const { budgetMode, resetFilters } = useFilterStore();
 
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
   const [viewMode, setViewMode] = useState('split'); // 'split', 'list', 'map'
@@ -23,13 +24,18 @@ export const Explore = () => {
     <PageShell>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
-        {/* Page Header & Search Bar */}
+        {/* Page Header & View Mode Switcher */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-100">
-              Explore {currentCity.name}
-            </h1>
-            <p className="text-xs text-slate-400">Discover attractions, food, hotels, cafes & budget spots</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-100">
+                Explore {currentCity.name}
+              </h1>
+              {isUsingFallback && (
+                <Badge variant="sample">Sample Data</Badge>
+              )}
+            </div>
+            <p className="text-xs text-slate-400 mt-1">Discover attractions, food, hotels, cafes & budget spots ({places.length} places available)</p>
           </div>
 
           {/* View Mode Switcher */}
@@ -66,9 +72,11 @@ export const Explore = () => {
 
         {/* Main Content Area */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Skeleton className="h-96 w-full" />
-            <Skeleton className="h-96 w-full md:col-span-2" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Skeleton className="h-72 w-full" />
+            <Skeleton className="h-72 w-full" />
+            <Skeleton className="h-72 w-full" />
+            <Skeleton className="h-72 w-full" />
           </div>
         ) : places.length === 0 ? (
           <EmptyState
@@ -80,7 +88,7 @@ export const Explore = () => {
         ) : (
           <div className={`grid gap-6 ${
             viewMode === 'list'
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+              ? 'grid-cols-1'
               : viewMode === 'map'
               ? 'grid-cols-1'
               : 'grid-cols-1 lg:grid-cols-12'
@@ -88,8 +96,14 @@ export const Explore = () => {
             
             {/* Places Cards List */}
             {viewMode !== 'map' && (
-              <div className={`${viewMode === 'split' ? 'lg:col-span-6 space-y-4 max-h-[750px] overflow-y-auto pr-1' : 'contents'}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className={`${
+                viewMode === 'split' ? 'lg:col-span-6 space-y-4 max-h-[750px] overflow-y-auto pr-1' : 'w-full'
+              }`}>
+                <div className={`grid gap-4 ${
+                  viewMode === 'split'
+                    ? 'grid-cols-1 sm:grid-cols-2'
+                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+                }`}>
                   {places.map((place) => (
                     <div
                       key={place.id}
