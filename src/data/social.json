@@ -1,0 +1,46 @@
+[
+  {
+    "id": "soc-101",
+    "username": "@punekar_explorer",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+    "content": "Just tried the spicy Misal at Bedekar near Shaniwarwada! Cleanliness was top notch and vibe was buzzing. 🍜 #PuneEats #CityPulse (Sample Feed)",
+    "timestamp": "10 mins ago",
+    "likes": 42,
+    "sentiment": "positive",
+    "category": "food",
+    "isSample": true
+  },
+  {
+    "id": "soc-102",
+    "username": "@traffic_watcher_pune",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+    "content": "Heavy congestion near University Circle metro construction right now. Take the SB Road alternative route! 🚦 #PuneTraffic (Sample Feed)",
+    "timestamp": "25 mins ago",
+    "likes": 88,
+    "sentiment": "negative",
+    "category": "traffic",
+    "isSample": true
+  },
+  {
+    "id": "soc-103",
+    "username": "@night_walker_girl",
+    "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
+    "content": "Kudos to PMC for fixing streetlights on Model Colony Lane 2! Feels much safer walking back from library now 🌙✨ #SafetyFirst (Sample Feed)",
+    "timestamp": "1 hour ago",
+    "likes": 115,
+    "sentiment": "positive",
+    "category": "lighting",
+    "isSample": true
+  },
+  {
+    "id": "soc-104",
+    "username": "@heritage_buff",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+    "content": "Completed the 4-site Heritage Trail around Kasba Peth today. Pataleshwar cave is such a hidden rock-cut gem! 🏛️ (Sample Feed)",
+    "timestamp": "3 hours ago",
+    "likes": 64,
+    "sentiment": "positive",
+    "category": "attraction",
+    "isSample": true
+  }
+]

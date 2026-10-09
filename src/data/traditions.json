@@ -1,0 +1,45 @@
+{
+  "festivals": [
+    {
+      "name": "Ganeshotsav (Ganesh Chaturthi)",
+      "timing": "August / September (10 Days)",
+      "description": "Pune is world-renowned for its grand 10-day Ganeshotsav celebrations, pioneered by Lokmanya Tilak in 1893. Features the Manache 5 Gananpati processions, rhythmic Dhol-Tasha troupes, and intricate theme pandals.",
+      "image": "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "name": "Palkhi Festival (Wari)",
+      "timing": "June / July (Monsoon)",
+      "description": "An 800-year-old annual pilgrimage walk where hundreds of thousands of Warkaris walk on foot from Dehu & Alandi to Pandharpur carrying holy footwear (Padukas) of Sant Tukaram and Sant Dnyaneshwar.",
+      "image": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+    }
+  ],
+  "cuisines": [
+    {
+      "name": "Misal Pav",
+      "specialty": "Spicy sprouted moth bean curry topped with farsan, onions, lemon and served with hot buttery pav.",
+      "famousSpots": ["Kattakirrr Misal", "Bedekar Misal", "Thorat Misal"]
+    },
+    {
+      "name": "Puran Poli",
+      "specialty": "Sweet flatbread stuffed with cooked chana dal, jaggery, cardamom, and served with generous dollops of pure desi ghee.",
+      "famousSpots": ["Sukanta Thali", "Durvankur Thali"]
+    },
+    {
+      "name": "Pithla Bhakri & Thecha",
+      "specialty": "Traditional rustic dish of cooked besan curry served with hot Jowar/Bajra Bhakri and fiery green chili-garlic thecha.",
+      "famousSpots": ["Sinhagad Fort Food Stalls", "Manas Resort Stalls"]
+    }
+  ],
+  "crafts": [
+    {
+      "name": "Puneri Pagadi",
+      "description": "A distinct turban headgear recognized as a symbol of pride, honor, and intellect in Pune since the Peshwa era.",
+      "status": "GI Tagged Heritage Craft"
+    },
+    {
+      "name": "Tambat Metal Craft (Coppersmithing)",
+      "description": "Traditional hand-beaten copper and brass utensil craft practiced by the Tambat craft community in Kasba Peth.",
+      "status": "UNESCO Heritage Recognition"
+    }
+  ]
+}

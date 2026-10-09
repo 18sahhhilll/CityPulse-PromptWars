@@ -1,0 +1,54 @@
+[
+  {
+    "id": "heritage-001",
+    "name": "Shaniwar Wada Palace",
+    "lat": 18.5196,
+    "lng": 73.8553,
+    "era": "18th Century (1732 AD)",
+    "builder": "Peshwa Baji Rao I",
+    "wikiTitle": "Shaniwar_Wada",
+    "summary": "Shaniwarwada is a 13-story fort of the Peshwas of the Maratha Empire, built in 1732. It was the seat of the Peshwas until 1818 when they lost control to the British East India Company.",
+    "whyItMatters": "Symbol of Maratha military prowess and administrative power during the peak expansion of the Maratha Empire.",
+    "image": "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
+    "tags": ["Maratha Empire", "Peshwa Seat", "Fortress Gate", "Sound & Light Show"]
+  },
+  {
+    "id": "heritage-002",
+    "name": "Lal Mahal",
+    "lat": 18.5191,
+    "lng": 73.8562,
+    "era": "17th Century (1630 AD)",
+    "builder": "Shahaji Bhosale",
+    "wikiTitle": "Lal_Mahal",
+    "summary": "Lal Mahal (Red Palace) is a historic palace established by Shahaji Bhosale for his wife Jijabai and son Chhatrapati Shivaji Maharaj, who spent his early childhood here.",
+    "whyItMatters": "Site of the daring night attack by Chhatrapati Shivaji Maharaj on Shaista Khan in 1663.",
+    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
+    "tags": ["Shivaji Maharaj", "Red Brick Palace", "Childhood Home", "Heritage Monument"]
+  },
+  {
+    "id": "heritage-003",
+    "name": "Pataleshwar Cave Temple",
+    "lat": 18.5268,
+    "lng": 73.8443,
+    "era": "8th Century (Rashtrakuta Dynasty)",
+    "builder": "Rashtrakuta Rulers",
+    "wikiTitle": "Pataleshwar",
+    "summary": "Pataleshwar Rock-cut Cave Temple is an 8th-century monolithic rock-cut cave carved out of a single basalt rock pillar dedicated to Lord Shiva.",
+    "whyItMatters": "One of the oldest surviving structural monuments in Pune, showcasing master Rashtrakuta rock engineering.",
+    "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
+    "tags": ["Rock Cut Architecture", "Monolithic Shiva Shrine", "8th Century", "Basalt Rock"]
+  },
+  {
+    "id": "heritage-004",
+    "name": "Sinhagad Fort",
+    "lat": 18.3663,
+    "lng": 73.7558,
+    "era": "14th - 17th Century",
+    "builder": "Maratha Warriors / Tanaji Malusare",
+    "wikiTitle": "Sinhagad",
+    "summary": "Sinhagad (Lion's Fort) is an ancient hill fortress located 30km southwest of Pune, renowned for the historic Battle of Sinhagad in 1670.",
+    "whyItMatters": "Site where warrior Tanaji Malusare recaptured the fort for Shivaji Maharaj using monitor lizards to scale steep cliffs.",
+    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    "tags": ["Hill Fort", "Maratha Valor", "Trekking", "Pithla Bhakri"]
+  }
+]

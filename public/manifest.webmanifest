@@ -1,0 +1,15 @@
+{
+  "short_name": "CityPulse",
+  "name": "CityPulse: Smart City Exploration & Navigation",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512 192x192 32x32"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0B1020",
+  "theme_color": "#8B5CF6",
+  "display": "standalone"
+}
