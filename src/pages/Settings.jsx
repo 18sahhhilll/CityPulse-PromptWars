@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageShell } from '../components/layout/PageShell';
 import { Button } from '../components/ui/Button';
 import { useSettingsStore } from '../store/useSettingsStore';
-import { Settings as SettingsIcon, Sun, Moon, Sliders, Globe } from 'lucide-react';
+import { useReportStore } from '../store/useReportStore';
+import { useFavoriteStore } from '../store/useFavoriteStore';
+import { Settings as SettingsIcon, Sun, Moon, Sliders, Globe, RefreshCw, Check } from 'lucide-react';
 
 export const Settings = () => {
   const { theme, setTheme, distanceUnit, setDistanceUnit, scoringWeights, setScoringWeights, resetWeights } = useSettingsStore();
+  const [resetDone, setResetDone] = useState(false);
+
+  const handleResetDemoData = () => {
+    localStorage.clear();
+    resetWeights();
+    setResetDone(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1200);
+  };
 
   return (
     <PageShell>
@@ -15,6 +27,26 @@ export const Settings = () => {
             <SettingsIcon className="w-7 h-7 text-cyan-400" /> App Settings & Preferences
           </h1>
           <p className="text-xs text-slate-400 mt-1">Configure theme, distance units, and customize livability score algorithm weights.</p>
+        </div>
+
+        {/* Reset Demo Data Button */}
+        <div className="glass-panel p-6 rounded-2xl border border-rose-500/30 bg-rose-950/20 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-bold font-display text-slate-100 flex items-center gap-2">
+                <RefreshCw className="w-4 h-4 text-rose-400" /> Reset Demo Data
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">Reset stored citizen reports, bookmarks, custom trails & scoring weights to default seeded state.</p>
+            </div>
+            <Button
+              onClick={handleResetDemoData}
+              variant="danger"
+              size="sm"
+              icon={resetDone ? Check : RefreshCw}
+            >
+              {resetDone ? 'Reset Complete!' : 'Reset Demo Data'}
+            </Button>
+          </div>
         </div>
 
         {/* Theme Settings */}

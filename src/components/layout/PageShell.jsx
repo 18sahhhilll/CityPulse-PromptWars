@@ -33,6 +33,22 @@ export const PageShell = ({ children, noFooter = false, title }) => {
       document.head.appendChild(metaDesc);
     }
     metaDesc.content = `${pageTitle}. Real-time city exploration, safety navigation, heritage walking trails & citizen reporting.`;
+
+    // Open Graph meta tags
+    const updateOGTag = (property, content) => {
+      let og = document.querySelector(`meta[property="${property}"]`);
+      if (!og) {
+        og = document.createElement('meta');
+        og.setAttribute('property', property);
+        document.head.appendChild(og);
+      }
+      og.content = content;
+    };
+
+    updateOGTag('og:title', pageTitle);
+    updateOGTag('og:description', `${pageTitle}. Explore attractions, safety heatmaps, safer routes, and citizen insights.`);
+    updateOGTag('og:image', '/favicon.svg');
+    updateOGTag('og:type', 'website');
   }, [location.pathname, title]);
 
   return (

@@ -1,7 +1,8 @@
 import React from 'react';
-import { CloudRain, Sun, Wind, Droplets, Gauge } from 'lucide-react';
+import { Sun, Wind, Droplets, RefreshCw } from 'lucide-react';
 import { useWeather } from '../../hooks/useWeather';
 import { Skeleton } from '../ui/Skeleton';
+import { Badge } from '../ui/Badge';
 
 export const WeatherCard = () => {
   const { weather, loading } = useWeather();
@@ -10,11 +11,7 @@ export const WeatherCard = () => {
     return <Skeleton className="h-36 w-full" />;
   }
 
-  const getAQIColor = (aqi) => {
-    if (aqi <= 50) return 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30';
-    if (aqi <= 100) return 'text-amber-400 bg-amber-500/10 border-amber-500/30';
-    return 'text-rose-400 bg-rose-500/10 border-rose-500/30';
-  };
+  const badgeVariant = weather.dataBadge === 'LIVE' ? 'verified' : weather.dataBadge === 'Cached' ? 'estimated' : 'sample';
 
   return (
     <div className="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col justify-between h-full relative overflow-hidden group">
@@ -22,9 +19,10 @@ export const WeatherCard = () => {
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
           <Sun className="w-3.5 h-3.5 text-amber-400" /> Weather & Air Quality
         </span>
-        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold border ${getAQIColor(weather.aqi)}`}>
-          AQI {weather.aqi} • {weather.aqiStatus}
-        </span>
+        <div className="flex items-center gap-1.5">
+          <Badge variant={badgeVariant}>{weather.dataBadge}</Badge>
+          <span className="text-[10px] text-slate-500">{weather.updatedStr}</span>
+        </div>
       </div>
 
       <div className="flex items-baseline justify-between my-2">
@@ -44,7 +42,7 @@ export const WeatherCard = () => {
         </div>
         <div className="flex items-center gap-1.5">
           <Droplets className="w-3.5 h-3.5 text-indigo-400" />
-          <span>{weather.humidity}% humidity</span>
+          <span>AQI {weather.aqi} ({weather.aqiStatus})</span>
         </div>
       </div>
     </div>

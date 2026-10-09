@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, ShieldAlert, History, BarChart3, Radio, MapPin, Search, ArrowRight, Tag, AlertTriangle } from 'lucide-react';
+import { Compass, ShieldAlert, History, BarChart3, Radio, MapPin, Search, ArrowRight, ExternalLink } from 'lucide-react';
 import { PageShell } from '../components/layout/PageShell';
 import { WeatherCard } from '../components/cards/WeatherCard';
 import { ScoreCard } from '../components/cards/ScoreCard';
@@ -8,6 +8,7 @@ import { AlertCard } from '../components/cards/AlertCard';
 import { PlaceCard } from '../components/cards/PlaceCard';
 import { MapView } from '../components/map/MapView';
 import { MarkerLayer } from '../components/map/MarkerLayer';
+import { Badge } from '../components/ui/Badge';
 import { useCityStore } from '../store/useCityStore';
 import { usePlaces } from '../hooks/usePlaces';
 import { useReportStore } from '../store/useReportStore';
@@ -31,42 +32,62 @@ export const Home = () => {
     <PageShell>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         
-        {/* Hero Banner Header */}
-        <div className="relative rounded-3xl p-6 sm:p-10 glass-panel border border-slate-800 overflow-hidden">
+        {/* Hero Banner Header with Interactive Mini Map */}
+        <div className="relative rounded-3xl p-6 sm:p-8 glass-panel border border-slate-800 overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           <div className="absolute inset-0 bg-gradient-to-r from-violet-950/60 via-slate-950/80 to-slate-950/90 -z-10" />
-          <div className="max-w-2xl space-y-3">
+          
+          <div className="lg:col-span-7 space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-xs font-semibold">
               <MapPin className="w-3.5 h-3.5 text-cyan-400" />
               <span>EXPLORING {currentCity.name.toUpperCase()}</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold font-display tracking-tight text-white">
+            <h1 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
               The Real-Time Pulse of <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent">{currentCity.name}</span>
             </h1>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
               Discover top hospitality spots, explore heritage walking trails, navigate safety heatmaps, and access verified citizen insights.
             </p>
           </div>
+
+          {/* Hero Right: Compact Interactive Mini Map */}
+          <div className="lg:col-span-5 h-56 rounded-2xl overflow-hidden border border-slate-700/60 shadow-xl relative group">
+            <MapView center={currentCity} zoom={13} className="h-full w-full">
+              <MarkerLayer places={places.slice(0, 5)} />
+            </MapView>
+            <div className="absolute bottom-3 right-3 z-[400]">
+              <Link
+                to="/explore"
+                className="px-3 py-1.5 rounded-xl bg-slate-950/90 hover:bg-slate-900 border border-slate-700 text-xs font-semibold text-cyan-300 flex items-center gap-1.5 shadow-lg backdrop-blur-md transition-all"
+              >
+                <span>Open full map</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* Live Metrics Row: Weather, Traffic, City Pulse Score */}
+        {/* Live Metrics Row: Weather, City Pulse Score, Traffic */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <WeatherCard />
-          <ScoreCard cityName={currentCity.name} />
+          <ScoreCard cityName={currentCity.name} trafficLevel={trafficInfo.level} />
 
           {/* Traffic Mood Card */}
           <div className="glass-panel rounded-2xl p-5 border border-slate-800 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Traffic Mood</span>
-              <span className={`px-2.5 py-0.5 rounded-lg text-xs font-bold border ${trafficInfo.bg}`}>
-                {trafficInfo.mood}
-              </span>
+              <div className="flex items-center gap-1.5">
+                <Badge variant="estimated">Estimated</Badge>
+                <span className={`px-2 py-0.5 rounded-lg text-xs font-bold border ${trafficInfo.bg}`}>
+                  {trafficInfo.mood}
+                </span>
+              </div>
             </div>
             <div className="my-3">
               <div className="text-xl font-bold text-slate-100">{trafficInfo.mood}</div>
               <p className="text-xs text-slate-400 mt-1">{trafficInfo.description}</p>
             </div>
             <div className="pt-3 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-              <span>Status: Estimated</span>
+              <span>Time-of-day heuristic</span>
               <Link to="/safety" className="text-cyan-400 font-semibold hover:underline">Check Safer Routes →</Link>
             </div>
           </div>
@@ -74,7 +95,7 @@ export const Home = () => {
 
         {/* Live Top Alert Banner */}
         <AlertCard
-          title="Monsoon Waterlogging Alert near Shivajinagar"
+          title="[Sample Alert] Monsoon Waterlogging Alert near Shivajinagar"
           message="Moderate waterlogging reported near Shivajinagar railway underpass. Vehicles advised to use University flyover route."
           type="warning"
           timestamp="Updated 15 mins ago"
